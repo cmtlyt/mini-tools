@@ -1,53 +1,46 @@
-# 用于构建和部署 Rsbuild 站点到 GitHub Pages 的示例工作流
-name: Rsbuild Deployment
+name: Deploy Pages
 
 on:
-  # 在推送到默认分支时触发
   push:
-    branches: ['main']
-  # 允许你从 Actions tabs 手动运行这个工作流
-  workflow_dispatch:
-
-# 设置 GITHUB_TOKEN 的权限以允许部署到 GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# 同时只允许一个部署执行
-concurrency:
-  group: 'pages'
-  cancel-in-progress: false
+    branches:
+      - main
 
 jobs:
-  build:
+  pages:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Use Node.js 20
-        uses: actions/setup-node@v3
         with:
-          node-version: 20
+          persist-credentials: false
 
-      # 如果你使用其他的包管理器，如 yarn 或 pnpm，
-      # 你需要先安装它们
-      - name: Install dependencies
-        run: npm i
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Use PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+
+      - name: Install Dependencies
+        run: pnpm install
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: './dist'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
