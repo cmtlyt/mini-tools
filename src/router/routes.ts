@@ -8,6 +8,9 @@ export const routes: RouteRecordRaw[] = [
     children: [{
       path: '',
       component: () => import('@/views/index/index.vue'),
+    }, {
+      path: 'mjtz',
+      component: () => import('@/views/mjtz/index.vue'),
     }],
   },
 ];

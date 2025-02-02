@@ -16,6 +16,7 @@ export default defineConfig({
   },
   html: {
     crossorigin: true,
+    mountId: 'app',
     template: path.resolve(__dirname, './index.html'),
   },
   source: {

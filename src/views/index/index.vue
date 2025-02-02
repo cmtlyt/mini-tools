@@ -3,7 +3,10 @@
 
 <template>
   <section class="">
-    index
+    indexs
+    <RouterLink to="/mjtz">
+      麻将骰子
+    </RouterLink>
   </section>
 </template>
 
