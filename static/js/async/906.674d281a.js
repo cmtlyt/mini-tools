@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmini_tools=self.webpackChunkmini_tools||[]).push([["906"],{526:function(e,n,t){t.r(n),t.d(n,{default:()=>u});var i=t(464);let s={class:""},u=(0,t(106).default)({},[["render",function(e,n){return(0,i.wg)(),(0,i.iD)("section",s," index ")}]])}}]);
