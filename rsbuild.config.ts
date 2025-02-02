@@ -15,6 +15,7 @@ export default defineConfig({
     assetPrefix: '/mini-tools/',
   },
   html: {
+    crossorigin: true,
     template: path.resolve(__dirname, './index.html'),
   },
   source: {
